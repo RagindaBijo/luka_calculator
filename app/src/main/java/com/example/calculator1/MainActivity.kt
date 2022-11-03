@@ -11,8 +11,8 @@ class MainActivity : AppCompatActivity() {
     private var operation = ""
     private var equal_number1=0
     private var equal_number2=0
-    private var operation_number=0
-
+    private var add_operator=false
+    private var press_equal=false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,38 +49,58 @@ class MainActivity : AppCompatActivity() {
 
     fun operationClick(clickedView: View) {
         if (clickedView is TextView) {
-            operation_number = 1
-            if (operation_number == 1) {
 
-            }
-
+            press_equal=false
 
             if (resultTextView.text.toString() != "") {
-                operand = resultTextView.text.toString().toDouble()
-                operation = clickedView.text.toString()
-                resultTextView.text = ""
+                if (add_operator==false) {
+                    operand = resultTextView.text.toString().toDouble()
+                    operation = clickedView.text.toString()
+                    resultTextView.text = ""
+                    add_operator=true
+                } else if (resultTextView.text.toString() == ".") {
 
-            } else if (resultTextView.text.toString() == ".") {
-                resultTextView.text = "0"
+                    resultTextView.text = "0"
 
-            } else {
+                } else{
+
+                    var result=0.0
+                    var secondoperand=resultTextView.text.toString().toDouble()
+                    when(operation) {
+
+                        "+" -> result = operand + secondoperand
+                        "-" -> result = operand - secondoperand
+                        "/" -> result = operand / secondoperand
+                        "*" -> result = operand * secondoperand
+
+                    }
+                    operand=result
+                    resultTextView.text=""
+                    operation = clickedView.text.toString()
+
+
+                }
+
+            }else{
+
                 operation = clickedView.text.toString()
+
             }
 
-
         }
+
     }
 
     fun equalsClick(clickedView: View) {
 
-        var secondoperand=resultTextView.text.toString()
+        var secondoperand = resultTextView.text.toString()
 
-        if (secondoperand =="."){
-            secondoperand ="0"
+        if (secondoperand == ".") {
+            secondoperand = "0"
         }
 
-        if(secondoperand == ""){
-            secondoperand =operand.toString()
+        if (secondoperand == "") {
+            secondoperand = operand.toString()
             when (operation) {
 
                 "-" -> resultTextView.text = (operand - secondoperand.toDouble()).toString()
@@ -89,16 +109,21 @@ class MainActivity : AppCompatActivity() {
                 "+" -> resultTextView.text = (operand + secondoperand.toDouble()).toString()
 
             }
+            add_operator = false
+            press_equal = true
+        } else{
 
-        }
 
+            when (operation) {
 
-        when (operation) {
+                "-" -> resultTextView.text = (operand - secondoperand.toDouble()).toString()
+                "*" -> resultTextView.text = (operand * secondoperand.toDouble()).toString()
+                "/" -> resultTextView.text = (operand / secondoperand.toDouble()).toString()
+                "+" -> resultTextView.text = (operand + secondoperand.toDouble()).toString()
 
-            "-" -> resultTextView.text = (operand - secondoperand.toDouble()).toString()
-            "*" -> resultTextView.text = (operand * secondoperand.toDouble()).toString()
-            "/" -> resultTextView.text = (operand / secondoperand.toDouble()).toString()
-            "+" -> resultTextView.text = (operand + secondoperand.toDouble()).toString()
+            }
+            add_operator=false
+            press_equal=true
 
         }
 
@@ -110,7 +135,7 @@ class MainActivity : AppCompatActivity() {
             resultTextView.text=resultTextView.text.toString()
         }
         equal_number1+=1
-        operation_number=0
+
 
     }
 
@@ -118,6 +143,8 @@ class MainActivity : AppCompatActivity() {
         operation=""
         operand = 0.0
         resultTextView.text = "0"
+        add_operator=false
+        press_equal=false
 
     }
 
@@ -125,6 +152,9 @@ class MainActivity : AppCompatActivity() {
         val length=resultTextView.length()
         if (length > 0){
             resultTextView.text=resultTextView.text.subSequence(0,length -1)
+            if(length == 0){
+                resultTextView.text="0"
+            }
 
         }
     }
@@ -141,8 +171,6 @@ class MainActivity : AppCompatActivity() {
             } else if("." !in resultTextView.text.toString()){
                 resultTextView.text=text+Decimal
             }
-
-
 
         }
 

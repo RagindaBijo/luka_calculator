@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var resultTextView: TextView
     private var operand = 0.0
     private var operation = ""

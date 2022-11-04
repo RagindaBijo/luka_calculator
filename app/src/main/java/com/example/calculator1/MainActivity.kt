@@ -9,10 +9,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var resultTextView: TextView
     private var operand = 0.0
     private var operation = ""
-    private var equal_number1=0
-    private var equal_number2=0
-    private var add_operator=false
-    private var press_equal=false
+    private var equalNumber1=0
+    private var equalNumber2=0
+    private var addoperator=false
+    private var pressequal=false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,9 +30,9 @@ class MainActivity : AppCompatActivity() {
             var text = resultTextView.text.toString()
             val number = clickedView.text.toString()
 
-            if(equal_number2<equal_number1){
+            if(equalNumber2<equalNumber1){
                 text=""
-                equal_number2+=1
+                equalNumber2+=1
             }
 
             if(text == "0"){
@@ -50,14 +50,14 @@ class MainActivity : AppCompatActivity() {
     fun operationClick(clickedView: View) {
         if (clickedView is TextView) {
 
-            press_equal=false
+            pressequal=false
 
             if (resultTextView.text.toString() != "") {
-                if (add_operator==false) {
+                if (!addoperator) {
                     operand = resultTextView.text.toString().toDouble()
                     operation = clickedView.text.toString()
                     resultTextView.text = ""
-                    add_operator=true
+                    addoperator=true
                 } else if (resultTextView.text.toString() == ".") {
 
                     resultTextView.text = "0"
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                 } else{
 
                     var result=0.0
-                    var secondoperand=resultTextView.text.toString().toDouble()
+                    val secondoperand=resultTextView.text.toString().toDouble()
                     when(operation) {
 
                         "+" -> result = operand + secondoperand
@@ -90,86 +90,102 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+//gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
+
 
     fun equalsClick(clickedView: View) {
+        if (clickedView is TextView){
+            var secondoperand = resultTextView.text.toString().toDouble()
 
-        var secondoperand = resultTextView.text.toString()
+            if (secondoperand.toString()== ".") {
+                secondoperand=0.0
+            }
 
-        if (secondoperand == ".") {
-            secondoperand = "0"
-        }
+            if (secondoperand.toString() == "") {
+                secondoperand = operand
+                var result=0.0
+                when (operation) {
 
-        if (secondoperand == "") {
-            secondoperand = operand.toString()
-            when (operation) {
+                    "-" -> result = (operand - secondoperand)
+                    "*" -> result=  (operand * secondoperand)
+                    "/" -> result = (operand / secondoperand)
+                    "+" -> result = (operand + secondoperand)
 
-                "-" -> resultTextView.text = (operand - secondoperand.toDouble()).toString()
-                "*" -> resultTextView.text = (operand * secondoperand.toDouble()).toString()
-                "/" -> resultTextView.text = (operand / secondoperand.toDouble()).toString()
-                "+" -> resultTextView.text = (operand + secondoperand.toDouble()).toString()
+
+                }
+                resultTextView.text=result.toString()
+                addoperator = false
+                pressequal = true
+            } else {
+                var result=0.0
+
+                when (operation) {
+
+                    "-" -> result = (operand - secondoperand)
+                    "*" -> result = (operand * secondoperand)
+                    "/" -> result = (operand / secondoperand)
+                    "+" -> result = (operand + secondoperand)
+
+                }
+
+                resultTextView.text=result.toString()
+                addoperator = false
+                pressequal = true
 
             }
-            add_operator = false
-            press_equal = true
-        } else{
 
 
-            when (operation) {
+            if (resultTextView.text.toString().toDouble() == resultTextView.text.toString().toDouble()
+                    .toInt().toDouble()
+            ) {
+                resultTextView.text = resultTextView.text.toString().toDouble().toInt().toString()
 
-                "-" -> resultTextView.text = (operand - secondoperand.toDouble()).toString()
-                "*" -> resultTextView.text = (operand * secondoperand.toDouble()).toString()
-                "/" -> resultTextView.text = (operand / secondoperand.toDouble()).toString()
-                "+" -> resultTextView.text = (operand + secondoperand.toDouble()).toString()
-
+            } else {
+                resultTextView.text = resultTextView.text.toString()
             }
-            add_operator=false
-            press_equal=true
+            equalNumber1 += 1
 
         }
-
-
-        if (resultTextView.text.toString().toDouble()==resultTextView.text.toString().toDouble().toInt().toDouble()){
-            resultTextView.text=resultTextView.text.toString().toDouble().toInt().toString()
-
-        }else{
-            resultTextView.text=resultTextView.text.toString()
-        }
-        equal_number1+=1
-
-
     }
+
+    //gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
 
     fun clearClick(clickedView: View) {
-        operation=""
-        operand = 0.0
-        resultTextView.text = "0"
-        add_operator=false
-        press_equal=false
-
+        if(clickedView is TextView){
+            operation = ""
+            operand = 0.0
+            resultTextView.text = "0"
+            addoperator = false
+            pressequal = false
+        }
     }
 
-    fun DelClick(clickedView: View){
-        val length=resultTextView.length()
-        if (length > 0){
-            resultTextView.text=resultTextView.text.subSequence(0,length -1)
-            if(length == 0){
-                resultTextView.text="0"
-            }
+    fun delClick(clickedView: View){
+            if(clickedView is TextView){
+            val length=resultTextView.length()
+            if (length > 0){
+                resultTextView.text=resultTextView.text.subSequence(0,length -1)
+                if(length == 1){
+                    resultTextView.text="0"
+                }
 
+            }
         }
     }
 
 
-    fun decimal_Click(clickedView: View){
+    fun decimalClick(clickedView: View){
 
         if(clickedView is TextView) {
-            var text = resultTextView.text.toString()
-            var Decimal = clickedView.text.toString()
+            val text = resultTextView.text.toString()
+            val decimal = clickedView.text.toString()
 
             if(resultTextView.text.toString( )== ""){
                 resultTextView.text="0."
             } else if("." !in resultTextView.text.toString()){
-                resultTextView.text=text+Decimal
+
+                val result=text+decimal
+                resultTextView.text=result
             }
 
         }
